@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Kalkulator Diskon</title>
+</head>
+<body>
+  <h2>Kalkulator Diskon</h2>
+  <label>Harga Barang (Rp):</label><br>
+  <input type="text" id="harga" oninput="formatHarga()" placeholder="Masukan Harga Barang"><br><br>
+  <label>Persentase Diskon (%):</label><br>
+  <input type="number" id="diskon" placeholder="Masukan Persentase Diskon"><br><br>
+  <button onclick="hitungDiskon()">Hitung</button>
+  <button onclick="resetForm()">Reset</button>
+  <p id="error" style="color:red;"></p>
+  <div id="hasil"></div>
+  <script>
+    function formatHarga() {
+      let input = document.getElementById("harga");
+      let angka = input.value.replace(/[^0-9]/g, '');
+      input.value = angka ? "Rp " + parseInt(angka).toLocaleString('id-ID') : '';
+    }
+    function hitungDiskon() {
+      let harga = parseInt(document.getElementById("harga").value.replace(/[^0-9]/g, ''));
+      let diskon = parseFloat(document.getElementById("diskon").value);
+      let error = document.getElementById("error");
+      let hasil = document.getElementById("hasil");  
+      error.textContent = "";
+      hasil.innerHTML = "";
+      if (isNaN(harga) || harga <= 0) {
+        error.textContent = "Masukkan harga yang valid.";
+        return;
+      }
+      if (isNaN(diskon) || diskon < 0 || diskon > 100) {
+        error.textContent = "Masukkan diskon antara 0 - 100.";
+        return;
+      }
+      let potongan = (diskon / 100) * harga;
+      let total = harga - potongan;
+      let format = x => "Rp " + x.toLocaleString('id-ID');
+      hasil.innerHTML = `
+        <p>Harga Asli: ${format(harga)}</p>
+        <p>Diskon: ${format(potongan)}</p>
+        <p>Total Bayar: ${format(total)}</p>
+      `;
+    }
+    function resetForm() {
+      document.getElementById("harga").value = "";
+      document.getElementById("diskon").value = "";
+      document.getElementById("error").textContent = "";
+      document.getElementById("hasil").innerHTML = "";
+    }
+  </script>
+</body>
+</html>
